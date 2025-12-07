@@ -11,19 +11,14 @@ from transformers import (
 )
 from datasets import Dataset
 
-# ==========================================
-# CONFIGURAÇÕES
-# ==========================================
+# Configs
 MODEL_NAME = "neuralmind/bert-base-portuguese-cased" 
-OUTPUT_DIR = "./results_tp2"
-FINAL_MODEL_DIR = "../data/modelo_final_tp2"
+OUTPUT_DIR = "./modelo_treinado"
+FINAL_MODEL_DIR = "./data"
 NUM_LABELS = 2 
 MAX_LENGTH = 128
 DATASET_PATH = "./data/dataset.csv"
 
-# ==========================================
-# 1. PREPARAÇÃO DOS DADOS
-# ==========================================
 def load_and_preprocess_data():
     print("--- Carregando Dataset ---")
     filename = DATASET_PATH
@@ -34,7 +29,7 @@ def load_and_preprocess_data():
         print(f"ERRO: Arquivo '{filename}' não encontrado.")
         return None, None
 
-    # Filtros e Limpeza (Mesma lógica anterior)
+    # Pré processamento
     if 'language' in df.columns:
         df = df[df['language'].str.contains('portuguese', case=False, na=False)]
 
@@ -58,7 +53,7 @@ def load_and_preprocess_data():
     df['labels'] = df['labels'].astype(int)
     df = df[df['labels'].isin([0, 1])]
 
-    # Amostragem (1000 amostras)
+    # Tamanho de amostragem
     MAX_SAMPLES = 1000
     if len(df) > MAX_SAMPLES:
         print(f"[AMOSTRAGEM] Reduzindo para {MAX_SAMPLES} amostras...")
@@ -84,9 +79,7 @@ def load_and_preprocess_data():
     train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
     return Dataset.from_pandas(train_df), Dataset.from_pandas(test_df)
 
-# ==========================================
-# 2. FUNÇÕES AUXILIARES
-# ==========================================
+# Funções auxiliares
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 def tokenize_function(examples):
@@ -99,9 +92,7 @@ def compute_metrics(eval_pred):
     acc = accuracy_score(labels, predictions)
     return {'accuracy': acc, 'f1': f1, 'precision': precision, 'recall': recall}
 
-# ==========================================
-# 3. EXECUÇÃO
-# ==========================================
+# Execução
 if __name__ == "__main__":
     print(f"--- Iniciando Script de Treinamento ---")
     
