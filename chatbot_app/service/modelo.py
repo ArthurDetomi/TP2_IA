@@ -2,11 +2,9 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import os
 
-# ==========================================
-# CONFIGURAÇÕES
-# ==========================================
+# Configs
 # IMPORTANTE: Aponta para a pasta onde o treino salvou o modelo
-MODEL_PATH = "./modelo_final_tp2" 
+MODEL_PATH = "./data/modelo_treinado" 
 MAX_LENGTH = 128
 
 def carregar_modelo():
@@ -53,28 +51,10 @@ def predict_sentiment(text, model, tokenizer):
     
     label_map = {0: "NEGATIVO 😡", 1: "POSITIVO 😊"}
     
-    print("-" * 50)
-    print(f"Review:   {text}")
-    print(f"Análise:  {label_map[prediction]}")
-    print(f"Certeza:  {confidence:.2%}")
-    print("-" * 50)
-
-if __name__ == "__main__":
-    # 1. Carrega o modelo (só uma vez no início)
-    model, tokenizer = carregar_modelo()
-    
-    print("\n✅ Modelo carregado com sucesso!")
-    print("Digite 'sair' para encerrar.\n")
-    
-    # 2. Loop de interação
-    while True:
-        user_input = input("\nDigite uma review de jogo: ")
-        
-        if user_input.lower() in ['sair', 'exit', 'quit']:
-            print("Encerrando...")
-            break
-            
-        if not user_input.strip():
-            continue
-            
-        predict_sentiment(user_input, model, tokenizer)
+    return f"""
+        -------
+        Review: {text}
+        Análise:  {label_map[prediction]}
+        Certeza:  {confidence:.2%}
+        -------
+    """

@@ -1,5 +1,8 @@
 from tkinter import *
 from controller.botController import answer_question
+from service.modelo import carregar_modelo
+
+model, tokenizer = carregar_modelo()
 
 BG_COLOR = "#17202A"        
 TEXT_COLOR = "#EAECEE"     
@@ -8,11 +11,6 @@ FG_USER = "#3498DB"
 FG_BOT = "#EAECEE" 
 FONT = "Helvetica 12"
 FONT_BOLD = "Helvetica 13 bold"
-
-root = Tk()
-root.title("Review Chatbot")
-root.geometry("450x550")
-root.configure(bg=BG_COLOR)
 
 def send(event=None):
     msg = e.get()
@@ -24,13 +22,17 @@ def send(event=None):
     txt.insert(END, "Você:\n", 'user_label')
     txt.insert(END, f"{msg}\n\n", 'user_msg')
     
-    response = answer_question(msg)
+    response = answer_question(msg, model, tokenizer)
     
     txt.insert(END, "Bot:\n", 'bot_label')
     txt.insert(END, f"{response}\n\n", 'bot_msg')
     
     txt.see(END)
 
+root = Tk()
+root.title("Review Chatbot")
+root.geometry("450x550")
+root.configure(bg=BG_COLOR)
 
 header_label = Label(root, bg=BG_COLOR, fg=TEXT_COLOR, text="Review Chatbot", 
                      font=FONT_BOLD, pady=15)
@@ -63,3 +65,8 @@ send_btn = Button(bottom_frame, text="Enviar", font=("Helvetica", 10, "bold"),
                   bg="#3498DB", fg="white", activebackground="#2980B9", 
                   activeforeground="white", bd=0, padx=20, command=send)
 send_btn.pack(side=RIGHT)
+
+# Initial message
+txt.insert(END, "Bot:\n", 'bot_label')
+txt.insert(END, "Olá! Envie um comentário sobre algum jogo e eu farei a análise de sentimento para você.\n\n", 'bot_msg')
+txt.see(END)

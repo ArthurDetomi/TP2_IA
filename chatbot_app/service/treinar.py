@@ -7,27 +7,26 @@ from transformers import (
     AutoTokenizer, 
     AutoModelForSequenceClassification, 
     TrainingArguments, 
-    Trainer,
-    DataCollatorWithPadding
+    Trainer
 )
 from datasets import Dataset
-import os
 
 # ==========================================
 # CONFIGURAÇÕES
 # ==========================================
 MODEL_NAME = "neuralmind/bert-base-portuguese-cased" 
 OUTPUT_DIR = "./results_tp2"
-FINAL_MODEL_DIR = "./modelo_final_tp2"
+FINAL_MODEL_DIR = "../data/modelo_final_tp2"
 NUM_LABELS = 2 
-MAX_LENGTH = 128 
+MAX_LENGTH = 128
+DATASET_PATH = "./data/dataset.csv"
 
 # ==========================================
 # 1. PREPARAÇÃO DOS DADOS
 # ==========================================
 def load_and_preprocess_data():
     print("--- Carregando Dataset ---")
-    filename = 'dataset.csv'
+    filename = DATASET_PATH
     
     try:
         df = pd.read_csv(filename, on_bad_lines='skip') 
