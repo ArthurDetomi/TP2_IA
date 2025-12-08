@@ -13,8 +13,8 @@ from datasets import Dataset
 
 # Configs
 MODEL_NAME = "neuralmind/bert-base-portuguese-cased" 
-OUTPUT_DIR = "./modelo_treinado"
-FINAL_MODEL_DIR = "./data"
+OUTPUT_DIR = "./data/modelo"
+FINAL_MODEL_DIR = "./data/modelo_treinado"
 NUM_LABELS = 2 
 MAX_LENGTH = 128
 DATASET_PATH = "./data/dataset.csv"
@@ -139,4 +139,4 @@ if __name__ == "__main__":
     print(f"\n--- Salvando modelo em '{FINAL_MODEL_DIR}' ---")
     trainer.save_model(FINAL_MODEL_DIR)
     tokenizer.save_pretrained(FINAL_MODEL_DIR)
-    print("✅ Treinamento concluído! Agora você pode rodar o arquivo 'testar.py'.")
+    print("✅ Treinamento concluído! Agora você pode rodar o arquivo 'main.py'.")
